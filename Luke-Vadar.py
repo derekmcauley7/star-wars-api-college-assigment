@@ -22,4 +22,4 @@ people = {}
 for key in results:
     if key['name'] == 'Luke Skywalker' or key['name'] == 'Darth Vader':
         people[key['name']] = len(key['starships'])
-print("Total Films : " + str(sum(people.values())))
+print("Total Starships : " + str(sum(people.values())))
