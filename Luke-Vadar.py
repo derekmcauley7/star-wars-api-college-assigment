@@ -2,13 +2,13 @@ from urllib.request import Request, urlopen
 from json import loads
 import ssl
 
-# How many people are returned by the API? Show how you can solve this without using the results count attribute?s
-
 certsPath='/usr/local/lib/python3.7/site-packages/pip/_vendor/certifi/cacert.pem'
 context=ssl.SSLContext()
 context.load_verify_locations(certsPath)
 
-url = 'http://swapi.co/api/people'
+# How many distinct starships are associated with Darth Vadar and Luke Skywalker?
+
+url = 'https://swapi.co/api/people'
 results = []
 while url != None:
     req = Request(url, None, {
@@ -17,5 +17,9 @@ while url != None:
     data = loads(urlopen(req, context=context).read().decode("utf-8"))
     results += data['results']
     url = data['next']
+people = {}
 
-print("Number of people: " + str(len(results)))
+for key in results:
+    if key['name'] == 'Luke Skywalker' or key['name'] == 'Darth Vader':
+        people[key['name']] = len(key['starships'])
+print("Total Films : " + str(sum(people.values())))

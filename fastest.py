@@ -2,13 +2,13 @@ from urllib.request import Request, urlopen
 from json import loads
 import ssl
 
-# How many people are returned by the API? Show how you can solve this without using the results count attribute?s
+# What is the fastest land vehicle?
 
 certsPath='/usr/local/lib/python3.7/site-packages/pip/_vendor/certifi/cacert.pem'
 context=ssl.SSLContext()
 context.load_verify_locations(certsPath)
 
-url = 'http://swapi.co/api/people'
+url = 'http://swapi.co/api/vehicles'
 results = []
 while url != None:
     req = Request(url, None, {
@@ -17,5 +17,9 @@ while url != None:
     data = loads(urlopen(req, context=context).read().decode("utf-8"))
     results += data['results']
     url = data['next']
+vehicles = {}
+for key in results:
+    if key['max_atmosphering_speed'] != 'unknown':
+        vehicles[key['name']] = key['max_atmosphering_speed']
+print(max(vehicles, key=lambda i: int(vehicles[i])))
 
-print("Number of people: " + str(len(results)))

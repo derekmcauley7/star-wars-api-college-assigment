@@ -2,13 +2,13 @@ from urllib.request import Request, urlopen
 from json import loads
 import ssl
 
-# How many people are returned by the API? Show how you can solve this without using the results count attribute?s
-
 certsPath='/usr/local/lib/python3.7/site-packages/pip/_vendor/certifi/cacert.pem'
 context=ssl.SSLContext()
 context.load_verify_locations(certsPath)
 
-url = 'http://swapi.co/api/people'
+# List all of the flying vehicles sorted by cargo capacity in ascending order?
+
+url = 'http://swapi.co/api/vehicles'
 results = []
 while url != None:
     req = Request(url, None, {
@@ -17,5 +17,16 @@ while url != None:
     data = loads(urlopen(req, context=context).read().decode("utf-8"))
     results += data['results']
     url = data['next']
+vehicles = {}
+vehicles2 ={}
+for key in results:
+    if key['cargo_capacity'] == 'unknown' or key['cargo_capacity'] == 'none':
+        vehicles2[key['name']] = key['cargo_capacity']
+    else:
+        vehicles[key['name']] = key['cargo_capacity']
+vehicles = sorted(vehicles.items(), key=lambda x: int(x[1]))
+all_vehicles = vehicles.copy()
+all_vehicles.append(vehicles2)
 
-print("Number of people: " + str(len(results)))
+print(all_vehicles)
+
